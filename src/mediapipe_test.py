@@ -30,10 +30,10 @@ with mp_hands.Hands(
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     if results.multi_hand_landmarks:
       for hand_landmarks in results.multi_hand_landmarks:
-        height = image.shape[0]
-        width = image.shape[1]
-        x = round(hand_landmarks.landmark[8].x * width)
-        y = round(hand_landmarks.landmark[8].y * height)
+        image_height = image.shape[0]
+        image_width = image.shape[1]
+        x = round(hand_landmarks.landmark[8].x * image_width)
+        y = round(hand_landmarks.landmark[8].y * image_height)
         cv2.circle(
             img=image,
             center=(x, y),
