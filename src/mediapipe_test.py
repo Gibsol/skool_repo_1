@@ -1,5 +1,7 @@
 import cv2
 import mediapipe as mp
+import numpy as np
+
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
@@ -28,7 +30,16 @@ with mp_hands.Hands(
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     if results.multi_hand_landmarks:
       for hand_landmarks in results.multi_hand_landmarks:
-        cv2.circle(img=image, center=(250, 250), radius=200, color=(255, 0, 0), thickness=10)
+        height = image.shape[0]
+        width = image.shape[1]
+        x = round(hand_landmarks.landmark[8].x * width)
+        y = round(hand_landmarks.landmark[8].y * height)
+        cv2.circle(
+            img=image,
+            center=(x, y),
+            radius=50,
+            color=(255, 255, 255),
+            thickness=10)
         print(hand_landmarks.landmark[8])
         mp_drawing.draw_landmarks(
             image,
