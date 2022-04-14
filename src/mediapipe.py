@@ -28,7 +28,7 @@ with mp_hands.Hands(
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     if results.multi_hand_landmarks:
       for hand_landmarks in results.multi_hand_landmarks:
-        cv2.circle(img=image, center=(hand_landmarks.x, hand_landmarks.y), radius=200, color=(255, 0, 0), thickness=10)
+        cv2.circle(img=image, center=(250, 250), radius=200, color=(255, 0, 0), thickness=10)
         print(hand_landmarks.landmark[8])
         mp_drawing.draw_landmarks(
             image,
