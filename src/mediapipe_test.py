@@ -1,7 +1,5 @@
 import cv2
 import mediapipe as mp
-import numpy as np
-
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
@@ -28,25 +26,29 @@ with mp_hands.Hands(
     # Draw the hand annotations on the image.
     image.flags.writeable = True
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    left_hand_x = 1
+    left_hand_y = 1
+    right_hand_x = 1
+    right_hand_y = 1 
     if results.multi_hand_landmarks:
       for hand_landmarks in results.multi_hand_landmarks:
-        image_height = image.shape[0]
-        image_width = image.shape[1]
-        x = round(hand_landmarks.landmark[8].x * image_width)
-        y = round(hand_landmarks.landmark[8].y * image_height)
-        cv2.circle(
-            img=image,
-            center=(x, y),
-            radius=50,
-            color=(255, 255, 255),
-            thickness=10)
-        print(hand_landmarks.landmark[8])
-        mp_drawing.draw_landmarks(
-            image,
-            hand_landmarks,
-            mp_hands.HAND_CONNECTIONS,
-            mp_drawing_styles.get_default_hand_landmarks_style(),
-            mp_drawing_styles.get_default_hand_connections_style())
+        x = int(hand_landmarks.landmark[8].x * 640)
+        y = int(hand_landmarks.landmark[8].y * 480)
+        if x < 480 / 2:
+            left_hand_y = y 
+            left_hand_x = x 
+        else:
+            right_hand_y = y 
+            right_hand_x = x        
+
+    color = (255, 0, 0)
+
+    cv2.circle(image, (left_hand_x, left_hand_y), 10, color, 2)
+    cv2.rectangle(image,(20,left_hand_y),(20,left_hand_y+50),(0,255,0),3)
+
+    cv2.circle(image, (right_hand_x, right_hand_y), 10, color, 2)
+    cv2.rectangle(image,(460,right_hand_y),(460,right_hand_y+50),(0,255,0),3)
+
     # Flip the image horizontally for a selfie-view display.
     cv2.imshow('MediaPipe Hands', cv2.flip(image, 1))
     if cv2.waitKey(5) & 0xFF == 27:
